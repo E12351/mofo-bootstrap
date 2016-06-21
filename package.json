@@ -1,0 +1,53 @@
+{
+  "name": "mofo-bootstrap",
+  "version": "1.0.0",
+  "homepage": "https://github.com/mozilla/mofo-bootstrap",
+  "engines" : {
+    "node": "^6.0.0",
+    "npm": "^3.0.0"
+  },
+  "bugs": "https://github.com/mozilla/mofo-bootstrap/issues",
+  "description": "Mozilla Foundation's Bootstrap 4 theme.",
+  "keywords": [
+    "bootstrap",
+    "mozilla",
+    "css",
+    "sass",
+    "theme"
+  ],
+  "repository": "https://github.com/mozilla/mofo-bootstrap",
+  "scripts": {
+    "preversion": "git checkout master && git pull mozilla master && npm test",
+    "version": "npm run build && git add -f dest",
+    "postversion": "npm publish && git push mozilla --tags && git rm -r dest && git commit --amend --no-edit && git push mozilla master",
+    "start": "npm run build && npm-run-all --parallel server watch:**",
+    "build": "mkdirp dest/css/ && npm-run-all --parallel build:**",
+    "build:jade": "jade src/index.jade -o demo",
+    "build:scss": "node-sass src/scss/mofo-bootstrap.scss dest/css/mofo-bootstrap.css && node-sass src/scss/demo.scss demo/css/demo.css",
+    "server": "live-server ./demo --port=1979",
+    "watch:jade": "chokidar 'src/index.jade' -c 'npm run build:jade'",
+    "watch:scss": "chokidar 'src/scss/**/*.scss' -c 'npm run build:scss'",
+    "test": "npm run test:sass",
+    "test:sass": "sass-lint -c node_modules/mofo-style/.sass-lint.yml --verbose --no-exit src/scss/**/*.scss",
+    "deploy": "node deploy.js"
+  },
+  "author": "Mozilla",
+  "license": "MPL-2.0",
+  "dependencies": {
+    "bootstrap": "v4.0.0-alpha.2"
+  },
+  "devDependencies": {
+    "chokidar": "^1.4.2",
+    "chokidar-cli": "^1.2.0",
+    "jade": "^1.11.0",
+    "live-server": "^1.0.0",
+    "mkdirp": "^0.5.1",
+    "mofo-style": "^2.3.0",
+    "ncp": "^2.0.0",
+    "nodegit": "^0.13.0",
+    "node-sass": "^3.4.2",
+    "npm-run-all": "^1.5.1",
+    "sass-lint": "^1.5.0",
+    "shelljs": "^0.7.0"
+  }
+}
